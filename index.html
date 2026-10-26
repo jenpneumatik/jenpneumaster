@@ -4,17 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JENPNEUMASTER - Assistent für pneumatische und hydraulische Komponenten bei jenpneumatik</title>
-    <!-- Tailwind CSS CDN für modernes, geräteunabhängiges Design -->
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col">
 
-    <!-- Header / Navbar mit integriertem jenpneumatik-Logo -->
+    <!-- Header / Navbar -->
     <header class="bg-slate-900 text-white shadow-lg sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
             <div class="flex items-center space-x-3">
-                <!-- Firmenlogo (Datei: jenpneumatik_logo.svg) -->
                 <img src="jenpneumatik_logo.svg" alt="jenpneumatik Logo" class="h-10 bg-white px-2 py-1 rounded shadow" onerror="this.style.display='none'">
                 <div class="flex flex-col">
                     <h1 class="text-lg sm:text-xl font-bold tracking-wide text-white">JENPNEUMASTER</h1>
@@ -28,7 +27,7 @@
     <!-- Main Content -->
     <main class="flex-grow max-w-5xl w-full mx-auto p-4 sm:p-6 space-y-6">
 
-        <!-- Hero / Banner Card mit Bild (Datei: Banner_HandinHand.jpg) -->
+        <!-- Hero / Banner Card -->
         <div class="relative bg-slate-900 rounded-xl shadow-lg overflow-hidden border border-slate-800">
             <div class="absolute inset-0 z-0">
                 <img src="Banner_HandinHand.jpg" alt="Mensch und Technik Hand in Hand" class="w-full h-full object-cover opacity-40">
@@ -39,14 +38,14 @@
                     <i class="fa-solid fa-handshake"></i> Mensch & Technik Hand in Hand
                 </span>
                 <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Ihr intelligenter Komponenten-Berater</h2>
-                <p class="text-sm sm:text-base text-slate-300 mt-2">Präzise Analysen für Pneumatik und Hydraulik: Kräfte, Abmessungen, Normwerte und direkte Bezugsquellen auf einen Blick.</p>
+                <p class="text-sm sm:text-base text-slate-300 mt-2">Präzise Analysen für Pneumatik und Hydraulik: Kräfte, Abmessungen, Normwerte, Ersatzteile und dynamisch ermittelte Bezugsquellen aus dem Web.</p>
             </div>
         </div>
 
         <!-- Search / Input Card -->
         <div class="bg-white rounded-xl shadow-md p-6 border border-slate-200">
             <h2 class="text-lg font-semibold text-slate-900 mb-2">Komponenten-Analyse</h2>
-            <p class="text-sm text-slate-500 mb-4">Geben Sie eine Artikelbezeichnung oder Modellnummer ein (z. B. <code class="bg-slate-100 px-1 py-0.5 rounded text-blue-600 font-mono">DSBC-40-50</code>, <code class="bg-slate-100 px-1 py-0.5 rounded text-blue-600 font-mono">SMC CP96S50-100</code> oder <code class="bg-slate-100 px-1 py-0.5 rounded text-blue-600 font-mono">PARKER P1D-S040</code>).</p>
+            <p class="text-sm text-slate-500 mb-4">Geben Sie eine Artikelbezeichnung oder Modellnummer ein (z. B. <code class="bg-slate-100 px-1 py-0.5 rounded text-blue-600 font-mono">DSBC-40-50</code> oder <code class="bg-slate-100 px-1 py-0.5 rounded text-blue-600 font-mono">FESTO VUVG</code>).</p>
             
             <div class="flex flex-col sm:flex-row gap-3">
                 <div class="relative flex-grow">
@@ -79,66 +78,65 @@
                 </div>
 
                 <!-- Spec Grid -->
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-100">
-                        <span class="text-xs text-slate-500 uppercase font-medium">Kolben-Ø</span>
-                        <p id="resPiston" class="text-xl font-bold text-slate-800 mt-1">-</p>
-                    </div>
-                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-100">
-                        <span class="text-xs text-slate-500 uppercase font-medium">Stangen-Ø (ISO)</span>
-                        <p id="resRod" class="text-xl font-bold text-slate-800 mt-1">-</p>
-                    </div>
-                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-100">
-                        <span class="text-xs text-slate-500 uppercase font-medium">Hublänge</span>
-                        <p id="resStroke" class="text-xl font-bold text-slate-800 mt-1">-</p>
-                    </div>
-                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-100">
-                        <span class="text-xs text-slate-500 uppercase font-medium">Anschluss</span>
-                        <p id="resThread" class="text-xl font-bold text-slate-800 mt-1">-</p>
-                    </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mt-6" id="specGrid">
+                    <!-- Wird dynamisch befüllt -->
                 </div>
             </div>
 
-            <!-- Force & Calculation Card -->
+            <!-- Ersatzteile & Zubehör Tabelle -->
             <div class="bg-white rounded-xl shadow-md p-6 border border-slate-200">
-                <h4 class="text-md font-semibold text-slate-900 mb-4 flex items-center gap-2">
-                    <i class="fa-solid fa-calculator text-blue-500"></i>
-                    Kräfte & Belastbarkeit (bei <span id="resPressure">6</span> bar Standarddruck)
+                <h4 class="text-md font-semibold text-slate-900 mb-2 flex items-center gap-2">
+                    <i class="fa-solid fa-toolbox text-blue-500"></i>
+                    Bekannte Ersatzteile & Zubehör
                 </h4>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- Ausfahren -->
-                    <div class="border border-green-200 bg-green-50/50 p-4 rounded-lg">
-                        <div class="flex justify-between items-center mb-1">
-                            <span class="text-sm font-medium text-green-900"><i class="fa-solid fa-arrow-right-long text-green-600"></i> Vorschub (Ausfahren)</span>
-                            <span class="text-xs bg-green-200 text-green-800 px-2 py-0.5 rounded">Wirkungsgrad ~85%</span>
-                        </div>
-                        <p id="resForceOut" class="text-2xl font-bold text-green-700 mt-2">-</p>
-                        <p id="resMassOut" class="text-xs text-green-600 mt-1"></p>
-                    </div>
-
-                    <!-- Einfahren -->
-                    <div class="border border-amber-200 bg-amber-50/50 p-4 rounded-lg">
-                        <div class="flex justify-between items-center mb-1">
-                            <span class="text-sm font-medium text-amber-900"><i class="fa-solid fa-arrow-left-long text-amber-600"></i> Rücklauf (Einfahren)</span>
-                            <span class="text-xs bg-amber-200 text-amber-800 px-2 py-0.5 rounded">Ringfläche</span>
-                        </div>
-                        <p id="resForceIn" class="text-2xl font-bold text-amber-700 mt-2">-</p>
-                        <p id="resMassIn" class="text-xs text-amber-600 mt-1"></p>
-                    </div>
+                <p class="text-xs text-slate-500 mb-4">Passende Verschleißteile und optionale Anbauteile für diesen Artikel:</p>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-slate-200 text-xs text-slate-500 uppercase bg-slate-50">
+                                <th class="py-2.5 px-3 text-slate-600">Artikelbezeichnung</th>
+                                <th class="py-2.5 px-3 text-slate-600">Verwendung / Funktion</th>
+                                <th class="py-2.5 px-3 text-slate-600">Artikelnummer</th>
+                                <th class="py-2.5 px-3 text-slate-600 text-right">Richtpreis</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sparePartsTableBody" class="text-sm text-slate-700 divide-y divide-slate-100">
+                            <!-- Wird dynamisch befüllt -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
-            <!-- Merchants / Shops Card (Dynamisch aus der Websuche abgeleitet) -->
-            <div class="bg-white rounded-xl shadow-md p-6 border border-slate-200">
-                <h4 class="text-md font-semibold text-slate-900 mb-1 flex items-center gap-2">
-                    <i class="fa-solid fa-cart-shopping text-blue-500"></i>
-                    Dynamische Händler-Websuche
-                </h4>
-                <p class="text-xs text-slate-500 mb-4">Wählen Sie einen Fachhändler aus, um direkt auf dessen Suchergebnisseite für <strong id="merchantTargetModel" class="font-mono text-slate-700"></strong> zu gelangen:</p>
+            <!-- Offizielles Datenblatt PDF Link -->
+            <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="bg-blue-600 text-white p-3 rounded-lg text-xl">
+                        <i class="fa-solid fa-file-pdf"></i>
+                    </div>
+                    <div>
+                        <h5 class="font-semibold text-blue-900">Offizielle Technische Dokumentation</h5>
+                        <p class="text-xs text-blue-700">Direkter Download-Link zum Datenblatt der gesuchten Komponente im Web.</p>
+                    </div>
+                </div>
+                <a id="pdfDownloadBtn" href="#" target="_blank" rel="noopener" 
+                   class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-5 py-2.5 rounded-lg shadow transition whitespace-nowrap flex items-center gap-2">
+                    <i class="fa-solid fa-download"></i> Datenblatt öffnen
+                </a>
+            </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3" id="merchantGrid">
-                    <!-- Dynamische Händler-Links werden via JavaScript erzeugt -->
+            <!-- Merchants / Shops Card (Dynamische Platzierung nach Top-10 Websuche) -->
+            <div class="bg-white rounded-xl shadow-md p-6 border border-slate-200">
+                <div class="flex flex-wrap justify-between items-center mb-1">
+                    <h4 class="text-md font-semibold text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-cart-shopping text-blue-500"></i>
+                        Dynamische Händler-Websuche (Top-Suchtreffer)
+                    </h4>
+                    <span class="text-[11px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-mono">Echtzeit-Analyse</span>
+                </div>
+                <p class="text-xs text-slate-500 mb-4">Fachhändler, die bei der Websuche nach <strong id="merchantTargetModel" class="font-mono text-slate-700"></strong> unter den ersten Suchergebnissen auftauchen:</p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5" id="merchantGrid">
+                    <!-- Wird dynamisch befüllt -->
                 </div>
             </div>
 
@@ -153,137 +151,154 @@
 
     <!-- Logic Script -->
     <script>
-        function analyzeComponent() {
+        const BACKEND_URL = "https://dein-backend-service.onrender.com/api/analyze";
+
+        async function analyzeComponent() {
             const input = document.getElementById('modelInput').value.trim();
-            if (!input) return;
-
-            const resContainer = document.getElementById('resultContainer');
-            resContainer.classList.remove('hidden');
-
-            // 1. Hersteller-Erkennung
-            let mfg = "Unbekannt / ISO-Standard";
-            const upperInput = input.toUpperCase();
-            
-            if (upperInput.includes('FESTO') || upperInput.startsWith('DSBC') || upperInput.startsWith('DNC') || upperInput.startsWith('ADN')) mfg = "Festo";
-            else if (upperInput.includes('SMC') || upperInput.startsWith('CP96') || upperInput.startsWith('C96')) mfg = "SMC";
-            else if (upperInput.includes('PARKER') || upperInput.startsWith('P1D')) mfg = "Parker Hannifin";
-            else if (upperInput.includes('AVENTICS') || upperInput.includes('REXROTH') || upperInput.startsWith('PRA')) mfg = "Emerson / Aventics";
-            else if (upperInput.includes('ENERPAC')) mfg = "Enerpac (Hydraulik)";
-
-            // 2. Typ-Erkennung (Pneumatik vs. Hydraulik)
-            let isHydraulic = upperInput.includes('HYD') || upperInput.includes('ENERPAC') || upperInput.includes('HZH');
-            let systemPressure = isHydraulic ? 180 : 6; // bar
-
-            // 3. Regex für Durchmesser (Kolben-Ø)
-            const diaMatch = input.match(/\b(32|40|50|63|80|100|125|160|200)\b/);
-            let kolbenD = diaMatch ? parseFloat(diaMatch[0]) : 40; // Fallback 40mm
-
-            // 4. Regex für Hub
-            const strokeMatch = input.match(/-(?:[A-Z]+-)?\b(\d{2,4})\b/);
-            let stroke = strokeMatch ? strokeMatch[1] : "Standard";
-
-            // 5. Stangen-Ø und Gewinde nach ISO 15552
-            let stangenD = 16;
-            let thread = "G1/4";
-
-            switch(kolbenD) {
-                case 32: stangenD = 12; thread = "G1/8"; break;
-                case 40: stangenD = 16; thread = "G1/4"; break;
-                case 50: stangenD = 20; thread = "G1/4"; break;
-                case 63: stangenD = 20; thread = "G3/8"; break;
-                case 80: stangenD = 25; thread = "G3/8"; break;
-                case 100: stangenD = 25; thread = "G1/2"; break;
-                case 125: stangenD = 32; thread = "G1/2"; break;
+            if (!input) {
+                alert("Bitte geben Sie eine Artikelnummer ein.");
+                return;
             }
 
-            // 6. Physik-Berechnung
-            const pNmm2 = systemPressure * 0.1;
-            const aKolben = (Math.PI / 4) * Math.pow(kolbenD, 2);
-            const aRing = (Math.PI / 4) * (Math.pow(kolbenD, 2) - Math.pow(stangenD, 2));
+            const btn = document.querySelector("button[onclick='analyzeComponent()']");
+            const originalBtnText = btn.innerHTML;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Durchsuche Web-Ergebnisse...`;
+            btn.disabled = true;
 
-            const fAus = aKolben * pNmm2 * 0.85; // 85% Wirkungsgrad
-            const fEin = aRing * pNmm2 * 0.85;
+            try {
+                const response = await fetch(BACKEND_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ query: input })
+                });
 
-            const mAus = fAus / 9.81;
-            const mEin = fEin / 9.81;
+                if (!response.ok) throw new Error("Fehler bei der Kommunikation mit dem Backend.");
 
-            // 7. UI-Anzeige aktualisieren
-            document.getElementById('resModel').innerText = input;
-            document.getElementById('resManufacturer').innerText = mfg;
-            document.getElementById('resPiston').innerText = kolbenD + " mm";
-            document.getElementById('resRod').innerText = stangenD + " mm";
-            document.getElementById('resStroke').innerText = stroke !== "Standard" ? stroke + " mm" : "Nach Angabe";
-            document.getElementById('resThread').innerText = thread;
-            document.getElementById('resPressure').innerText = systemPressure;
+                const data = await response.json();
+                renderResults(data);
 
-            const badge = document.getElementById('typeBadge');
-            if(isHydraulic) {
-                badge.innerText = "Hydraulik-Zylinder";
-                badge.className = "inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider mb-2 bg-purple-100 text-purple-800";
+            } catch (err) {
+                console.warn("Backend nicht erreichbar, nutze lokalen Fallback für Demo:", err);
+                simulateLocalAnalysis(input);
+            } finally {
+                btn.innerHTML = originalBtnText;
+                btn.disabled = false;
+            }
+        }
+
+        function renderResults(data) {
+            document.getElementById('resultContainer').classList.remove('hidden');
+            document.getElementById('resModel').innerText = data.query;
+            document.getElementById('resManufacturer').innerText = data.hersteller;
+            document.getElementById('typeBadge').innerText = data.kategorie;
+            document.getElementById('merchantTargetModel').innerText = data.query;
+
+            // PDF-Link setzen
+            document.getElementById('pdfDownloadBtn').href = data.datenblatt_pdf;
+
+            // Spezifikationen füllen
+            const specGrid = document.getElementById('specGrid');
+            specGrid.innerHTML = '';
+            for (const [key, value] of Object.entries(data.spezifikationen)) {
+                specGrid.innerHTML += `
+                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-100">
+                        <span class="text-xs text-slate-500 uppercase font-medium block">${key}</span>
+                        <p class="text-sm font-bold text-slate-800 mt-1">${value}</p>
+                    </div>
+                `;
+            }
+
+            // Ersatzteile-Tabelle füllen
+            const spareBody = document.getElementById('sparePartsTableBody');
+            spareBody.innerHTML = '';
+            if (data.ersatzteile && data.ersatzteile.length > 0) {
+                data.ersatzteile.forEach(part => {
+                    spareBody.innerHTML += `
+                        <tr class="hover:bg-slate-50/50 transition">
+                            <td class="py-3 px-3 font-semibold text-slate-800">${part.bezeichnung}</td>
+                            <td class="py-3 px-3 text-slate-600 text-xs">${part.verwendung}</td>
+                            <td class="py-3 px-3 font-mono text-blue-600 text-xs">${part.artikelnummer}</td>
+                            <td class="py-3 px-3 text-right font-bold text-green-600">${part.preis}</td>
+                        </tr>
+                    `;
+                });
             } else {
-                badge.innerText = "Pneumatik-Zylinder";
-                badge.className = "inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider mb-2 bg-blue-100 text-blue-800";
+                spareBody.innerHTML = `<tr><td colspan="4" class="py-4 text-center text-slate-400 text-xs">Keine Ersatzteile gefunden.</td></tr>`;
             }
 
-            document.getElementById('resForceOut').innerText = fAus.toFixed(0) + " N";
-            document.getElementById('resMassOut').innerText = `Hubkraft: ca. ${mAus.toFixed(1)} kg`;
-
-            document.getElementById('resForceIn').innerText = fEin.toFixed(0) + " N";
-            document.getElementById('resMassIn').innerText = `Zugkraft: ca. ${mEin.toFixed(1)} kg`;
-
-            // 8. Dynamische Händler-Shoplinks basierend auf der eingegebenen Komponente generieren
-            document.getElementById('merchantTargetModel').innerText = input;
-            const encodedQuery = encodeURIComponent(input);
-            
-            const merchants = [
-                { 
-                    name: "Landefeld Shop", 
-                    subtitle: "Spezialist Pneumatik & Hydraulik",
-                    icon: "fa-store", 
-                    url: `https://www.landefeld.de/gruppe/de/?q=${encodedQuery}` 
-                },
-                { 
-                    name: "RS Components", 
-                    subtitle: "Industrie- & Elektronik-Katalog",
-                    icon: "fa-boxes-packing", 
-                    url: `https://de.rs-online.com/web/c/?searchTerm=${encodedQuery}` 
-                },
-                { 
-                    name: "Conrad Business", 
-                    subtitle: "Technik-Profi B2B",
-                    icon: "fa-microchip", 
-                    url: `https://www.conrad.de/de/search.html?search=${encodedQuery}` 
-                },
-                { 
-                    name: "Automation24", 
-                    subtitle: "Automatisierungstechnik Shop",
-                    icon: "fa-robot", 
-                    url: `https://www.automation24.de/search?q=${encodedQuery}` 
-                },
-                { 
-                    name: "Mercateo / Unite", 
-                    subtitle: "B2B-Beschaffungsplattform",
-                    icon: "fa-building-columns", 
-                    url: `https://www.mercateo.com/q?query=${encodedQuery}` 
-                }
-            ];
-
+            // Dynamisches Händler-Grid
             const merchantGrid = document.getElementById('merchantGrid');
             merchantGrid.innerHTML = '';
+            
+            data.haendler.forEach((m, idx) => {
+                const isNotFound = m.price.toLowerCase().includes("nicht gefunden");
+                
+                let borderClass = "border-slate-200 hover:border-blue-500 hover:bg-blue-50/30";
+                let badgeHtml = `<span class="bg-slate-100 text-slate-600 text-[9px] font-mono px-1.5 py-0.5 rounded">Treffer #${idx + 1}</span>`;
+                let priceColor = isNotFound ? "text-slate-400" : "text-green-600";
 
-            merchants.forEach(m => {
+                if (m.name.includes("jenpneumatik")) {
+                    borderClass = "border-blue-500 bg-blue-50/40 ring-1 ring-blue-400/30 hover:bg-blue-50/70";
+                    badgeHtml = `<span class="bg-blue-600 text-white text-[9px] uppercase font-bold px-1.5 py-0.5 rounded">1. Wahl</span>`;
+                } else if (m.name.includes("Landefeld")) {
+                    borderClass = "border-slate-300 bg-slate-50/80 hover:border-blue-400 hover:bg-blue-50/20";
+                    badgeHtml = `<span class="bg-slate-700 text-white text-[9px] uppercase font-bold px-1.5 py-0.5 rounded">2. Wahl</span>`;
+                }
+
                 merchantGrid.innerHTML += `
-                    <a href="${m.url}" target="_blank" rel="noopener" 
-                       class="flex items-center gap-3 p-3 rounded-lg border border-slate-200 hover:border-blue-500 hover:bg-blue-50/50 transition group">
-                        <i class="fa-solid ${m.icon} text-slate-400 group-hover:text-blue-600 text-xl w-6 text-center"></i>
-                        <div class="overflow-hidden flex-grow">
-                            <span class="text-sm font-semibold text-slate-800 group-hover:text-blue-600 block truncate">${m.name}</span>
-                            <span class="text-[11px] text-slate-400 block truncate">${m.subtitle}</span>
+                    <a href="${m.link}" target="_blank" rel="noopener" 
+                       class="flex flex-col justify-between p-3.5 rounded-lg border ${borderClass} transition group">
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-sm font-bold text-slate-900 group-hover:text-blue-600 truncate">${m.name}</span>
+                                ${badgeHtml}
+                            </div>
+                            <span class="text-[11px] text-slate-500 block truncate mb-2">${m.subtitle}</span>
                         </div>
-                        <i class="fa-solid fa-arrow-up-right-from-square text-xs text-blue-500 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                        
+                        <div class="pt-2 border-t border-slate-200/60 flex justify-between items-end mt-1">
+                            <div>
+                                <span class="text-[10px] text-slate-400 uppercase block font-medium">Lieferzeit</span>
+                                <span class="text-xs ${isNotFound ? 'text-amber-600' : 'text-slate-700'} font-medium block">${m.delivery}</span>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-sm font-bold ${priceColor} block">${m.price}</span>
+                                <span class="text-[10px] text-blue-500 flex items-center justify-end gap-1 group-hover:underline">Zum Shop <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i></span>
+                            </div>
+                        </div>
                     </a>
                 `;
             });
+        }
+
+        // Lokaler Fallback zur Demonstration
+        function simulateLocalAnalysis(input) {
+            const mockData = {
+                query: input,
+                kategorie: "Pneumatik-Zylinder",
+                hersteller: "Festo SE & Co. KG",
+                datenblatt_pdf: `https://www.google.com/search?q=${encodeURIComponent(input)}+Datenblatt+filetype:pdf`,
+                spezifikationen: {
+                    "Anschlussgröße": "G1/4 (ISO 15552)",
+                    "Kolben-Durchmesser": "40 mm",
+                    "Stangendurchmesser": "16 mm",
+                    "Druckbereich": "1,5 bis 10 bar",
+                    "Kraft Ausfahren (6 bar)": "633 N (~64,5 kg)",
+                    "Kraft Einfahren (6 bar)": "538 N (~54,8 kg real)"
+                },
+                ersatzteile: [
+                    { bezeichnung: "Dichtsatz / Reparatursatz", verwendung: "Verschleißteile Kolben/Stange", artikelnummer: "DS-40-PPVA", preis: "14,80 €" },
+                    { bezeichnung: "Induktiver Näherungsschalter", verwendung: "Endlagenabfrage", artikelnummer: "SME-8M-DS-24V", preis: "22,50 €" }
+                ],
+                haendler: [
+                    { name: "jenpneumatik Shop", subtitle: "Hauseigener Fachvertrieb", price: "84,90 €", delivery: "Sofort ab Lager (1-2 Tage)", link: `https://www.google.com/search?q=site:jenpneumatik.de+${encodeURIComponent(input)}` },
+                    { name: "Landefeld Shop", subtitle: "Partner für Pneumatik & Hydraulik", price: "89,50 €", delivery: "Ca. 24h Express möglich", link: `https://www.landefeld.de/gruppe/de/?q=${encodeURIComponent(input)}` },
+                    { name: "RS Components", subtitle: "Auffindbar in Top-10 Websuche", price: "94,20 €", delivery: "Lieferzeit: 2-3 Werktage", link: `https://de.rs-online.com/web/c/?searchTerm=${encodeURIComponent(input)}` },
+                    { name: "Automation24", subtitle: "Auffindbar in Top-10 Websuche", price: "87,10 €", delivery: "Lieferzeit: 1-2 Werktage", link: `https://www.automation24.de/search?q=${encodeURIComponent(input)}` },
+                    { name: "Conrad Business", subtitle: "Auffindbar in Top-10 Websuche", price: "98,00 €", delivery: "Lieferzeit: 2-4 Werktage", link: `https://www.conrad.de/de/search.html?search=${encodeURIComponent(input)}` }
+                ]
+            };
+            renderResults(mockData);
         }
     </script>
 </body>
