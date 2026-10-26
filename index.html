@@ -38,14 +38,14 @@
                     <i class="fa-solid fa-handshake"></i> Mensch & Technik Hand in Hand
                 </span>
                 <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Ihr intelligenter Komponenten-Berater</h2>
-                <p class="text-sm sm:text-base text-slate-300 mt-2">Echtzeit-Webanalyse für Pneumatik und Hydraulik: Live-Daten von Hersteller- und Händlerseiten, offizielle Dokumentationen und Bezugsquellen.</p>
+                <p class="text-sm sm:text-base text-slate-300 mt-2">Echtzeit-Webanalyse mit Anti-Halluzinations-Schutz und interaktiver Zylinder-Kraftberechnung.</p>
             </div>
         </div>
 
         <!-- Search / Input Card -->
         <div class="bg-white rounded-xl shadow-md p-6 border border-slate-200">
             <h2 class="text-lg font-semibold text-slate-900 mb-2">Live-Komponenten-Recherche</h2>
-            <p class="text-sm text-slate-500 mb-4">Geben Sie eine beliebige Artikelnummer ein (z. B. <code class="bg-slate-100 px-1 py-0.5 rounded text-blue-600 font-mono">DSWPM 32/10</code> oder <code class="bg-slate-100 px-1 py-0.5 rounded text-blue-600 font-mono">DSBC-40-50</code>):</p>
+            <p class="text-sm text-slate-500 mb-4">Geben Sie eine Artikelnummer ein (z. B. <code class="bg-slate-100 px-1 py-0.5 rounded text-blue-600 font-mono">DSWPM 32/10</code>):</p>
             
             <div class="flex flex-col sm:flex-row gap-3">
                 <div class="relative flex-grow">
@@ -56,7 +56,7 @@
                 <button onclick="analyzeComponent()" 
                     class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-3 rounded-lg shadow-md transition flex items-center justify-center gap-2">
                     <i class="fa-solid fa-magnifying-glass"></i>
-                    Live Analysieren
+                    Analysieren
                 </button>
             </div>
         </div>
@@ -68,11 +68,11 @@
             <div class="bg-white rounded-xl shadow-md p-6 border border-slate-200">
                 <div class="flex flex-wrap justify-between items-start gap-4 pb-4 border-b border-slate-100">
                     <div>
-                        <span id="typeBadge" class="inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider mb-2 bg-blue-100 text-blue-800">Live-Index ermittelt</span>
+                        <span id="typeBadge" class="inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider mb-2 bg-blue-100 text-blue-800">Analysiert</span>
                         <h3 id="resModel" class="text-2xl font-bold text-slate-900 font-mono"></h3>
                     </div>
                     <div class="text-right">
-                        <span class="text-xs text-slate-400 block">Hersteller (aus Websuche)</span>
+                        <span class="text-xs text-slate-400 block">Erkannter Hersteller</span>
                         <span id="resManufacturer" class="text-lg font-bold text-blue-600"></span>
                     </div>
                 </div>
@@ -83,13 +83,54 @@
                 </div>
             </div>
 
+            <!-- KRAFT-SIMULATOR WIDGET (Wird nur angezeigt, wenn es ein Zylinder ist) -->
+            <div id="forceCalculatorCard" class="hidden bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-xl shadow-xl p-6 border border-slate-700">
+                <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-700">
+                    <h4 class="text-md font-bold flex items-center gap-2 text-blue-400">
+                        <i class="fa-solid fa-gauge-high"></i> Interaktiver Zylinder-Kraftrechner
+                    </h4>
+                    <span id="calcMeta" class="text-xs bg-blue-500/20 text-blue-300 px-2.5 py-1 rounded-full border border-blue-400/30 font-mono">ISO Standard</span>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+                    <!-- Schieberegler für Druck -->
+                    <div class="space-y-3 bg-slate-800/80 p-4 rounded-lg border border-slate-700">
+                        <div class="flex justify-between items-center">
+                            <label for="pressureSlider" class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Anliegender Druck</label>
+                            <span id="pressureVal" class="text-lg font-bold text-blue-400 font-mono">6.0 bar</span>
+                        </div>
+                        <input type="range" id="pressureSlider" min="1" max="10" step="0.5" value="6" 
+                            class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-500"
+                            oninput="updateForceCalculation()">
+                        <div class="flex justify-between text-[10px] text-slate-500 font-mono">
+                            <span>1 bar</span>
+                            <span>5 bar</span>
+                            <span>10 bar</span>
+                        </div>
+                    </div>
+
+                    <!-- Ergebnisse: Ausfahren -->
+                    <div class="bg-slate-800/80 p-4 rounded-lg border border-slate-700 text-center">
+                        <span class="text-[11px] uppercase tracking-wider text-slate-400 font-semibold block mb-1">Kraft Ausfahren (Kolbenfläche)</span>
+                        <div class="text-2xl font-extrabold text-green-400 font-mono" id="forceOutVal">0 N</div>
+                        <div class="text-xs text-slate-400 mt-1 font-mono" id="forceOutKg">(0 kg real mit 85% Wirkungsgrad)</div>
+                    </div>
+
+                    <!-- Ergebnisse: Einfahren -->
+                    <div class="bg-slate-800/80 p-4 rounded-lg border border-slate-700 text-center">
+                        <span class="text-[11px] uppercase tracking-wider text-slate-400 font-semibold block mb-1">Kraft Einfahren (Ringfläche)</span>
+                        <div class="text-2xl font-extrabold text-blue-400 font-mono" id="forceInVal">0 N</div>
+                        <div class="text-xs text-slate-400 mt-1 font-mono" id="forceInKg">(0 kg real mit 85% Wirkungsgrad)</div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Ersatzteile & Zubehör Tabelle -->
             <div class="bg-white rounded-xl shadow-md p-6 border border-slate-200">
                 <h4 class="text-md font-semibold text-slate-900 mb-2 flex items-center gap-2">
                     <i class="fa-solid fa-toolbox text-blue-500"></i>
-                    Zubehör & Ersatzteile (Live-Extraktion)
+                    Zubehör & Ersatzteile
                 </h4>
-                <p class="text-xs text-slate-500 mb-4">Passende Verschleißteile direkt aus den Hersteller- und Händlerkatalogen:</p>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
@@ -129,9 +170,8 @@
                 <div class="flex flex-wrap justify-between items-center mb-1">
                     <h4 class="text-md font-semibold text-slate-900 flex items-center gap-2">
                         <i class="fa-solid fa-cart-shopping text-blue-500"></i>
-                        Live-Bezugsquellen & Verfügbarkeit
+                        Bezugsquellen & Verfügbarkeit
                     </h4>
-                    <span class="text-[11px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-mono">Top-10 Treffer</span>
                 </div>
                 <p class="text-xs text-slate-500 mb-4">Live-Prüfung für <strong id="merchantTargetModel" class="font-mono text-slate-700"></strong>:</p>
 
@@ -146,13 +186,13 @@
 
     <!-- Footer -->
     <footer class="bg-slate-900 text-slate-400 text-xs py-4 text-center mt-auto">
-        <p>© 2026 jenpneumatik & Schlauchtechnik GmbH · JENPNEUMASTER Portal · Live-Webrecherche</p>
+        <p>© 2026 jenpneumatik & Schlauchtechnik GmbH · JENPNEUMASTER Portal · Anti-Halluzinations-Schutz aktiv</p>
     </footer>
 
     <!-- Logic Script -->
     <script>
-        // HIER DEINE RENDER-BACKEND-URL EINTRAGEN
         const BACKEND_URL = "https://dein-backend-service.onrender.com/api/analyze";
+        let currentCylinderData = null;
 
         async function analyzeComponent() {
             const input = document.getElementById('modelInput').value.trim();
@@ -163,7 +203,7 @@
 
             const btn = document.querySelector("button[onclick='analyzeComponent()']");
             const originalBtnText = btn.innerHTML;
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Führe Live-Websuche aus...`;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Suche...`;
             btn.disabled = true;
 
             try {
@@ -173,14 +213,15 @@
                     body: JSON.stringify({ query: input })
                 });
 
-                if (!response.ok) throw new Error("Fehler bei der Live-Abfrage.");
+                if (!response.ok) throw new Error("Fehler bei der Abfrage.");
 
                 const data = await response.json();
+                currentCylinderData = data;
                 renderResults(data);
 
             } catch (err) {
-                console.warn("Backend-Verbindung fehlgeschlagen, nutze Fallback:", err);
-                simulateLiveAnalysis(input);
+                console.warn("Backend nicht erreichbar, nutze Test-Fallback für Zylinder:", err);
+                simulateFallback(input);
             } finally {
                 btn.innerHTML = originalBtnText;
                 btn.disabled = false;
@@ -196,16 +237,29 @@
 
             document.getElementById('pdfDownloadBtn').href = data.datenblatt_pdf;
 
-            // Spezifikationen füllen
+            // Spezifikationen füllen mit Anti-Halluzinations-Schutz ("Keine Angaben")
             const specGrid = document.getElementById('specGrid');
             specGrid.innerHTML = '';
             for (const [key, value] of Object.entries(data.spezifikationen)) {
+                const isUnknown = value.toLowerCase().includes("keine angaben") || value === "";
+                const valueColor = isUnknown ? "text-slate-400 italic" : "text-slate-800 font-bold";
+
                 specGrid.innerHTML += `
                     <div class="bg-slate-50 p-4 rounded-lg border border-slate-100">
                         <span class="text-xs text-slate-500 uppercase font-medium block">${key}</span>
-                        <p class="text-sm font-bold text-slate-800 mt-1">${value}</p>
+                        <p class="text-sm ${valueColor} mt-1">${isUnknown ? "Keine Angaben" : value}</p>
                     </div>
                 `;
+            }
+
+            // Kraft-Simulator anzeigen, WENN es sich um einen Zylinder mit bekannten Maßen handelt
+            const calcCard = document.getElementById('forceCalculatorCard');
+            if (data.is_cylinder && data.kolben_mm) {
+                calcCard.classList.remove('hidden');
+                document.getElementById('calcMeta').innerText = `Kolben-Ø ${data.kolben_mm} mm / Stange ${data.stange_mm || 12} mm`;
+                updateForceCalculation(); // Initiale Berechnung durchführen
+            } else {
+                calcCard.classList.add('hidden');
             }
 
             // Ersatzteile-Tabelle füllen
@@ -253,7 +307,7 @@
                         
                         <div class="pt-2 border-t border-slate-200/60 flex justify-between items-end mt-1">
                             <div>
-                                <span class="text-[10px] text-slate-400 uppercase block font-medium">Lieferzeit</span>
+                                <span class="text-[10px] text-slate-400 uppercase block font-medium">Verfügbarkeit</span>
                                 <span class="text-xs text-slate-700 font-medium block">${m.delivery}</span>
                             </div>
                             <div class="text-right">
@@ -266,30 +320,72 @@
             });
         }
 
-        function simulateLiveAnalysis(input) {
+        // Echtzeit-Berechnung der Kräfte über den Schieberegler
+        function updateForceCalculation() {
+            if (!currentCylinderData || !currentCylinderData.kolben_mm) return;
+
+            const p_bar = parseFloat(document.getElementById('pressureSlider').value);
+            document.getElementById('pressureVal').innerText = p_bar.toFixed(1) + " bar";
+
+            const d_kolben = currentCylinderData.kolben_mm; // mm
+            const d_stange = currentCylinderData.stange_mm || 12.0; // mm
+
+            // Druck in N/mm² (1 bar = 0.1 N/mm²)
+            const p_nmm2 = p_bar * 0.1;
+
+            // Flächen in mm²
+            const a_kolben = (Math.PI / 4) * Math.pow(d_kolben, 2);
+            const a_ring = (Math.PI / 4) * (Math.pow(d_kolben, 2) - Math.pow(d_stange, 2));
+
+            // Kräfte in Newton (Theoretisch)
+            const f_out_theo = a_kolben * p_nmm2;
+            const f_in_theo = a_ring * p_nmm2;
+
+            // Praktische Kräfte mit 85% Wirkungsgrad (Reibung Dichtungen)
+            const efficiency = 0.85;
+            const f_out_prac = f_out_theo * efficiency;
+            const f_in_prac = f_in_theo * efficiency;
+
+            // Umrechnung in kg (~ / 9.81)
+            const kg_out = f_out_prac / 9.81;
+            const kg_in = f_in_prac / 9.81;
+
+            document.getElementById('forceOutVal').innerText = `${Math.round(f_out_prac)} N`;
+            document.getElementById('forceOutKg').innerText = `(~${kg_out.toFixed(1)} kg real, Theo: ${Math.round(f_out_theo)} N)`;
+
+            document.getElementById('forceInVal').innerText = `${Math.round(f_in_prac)} N`;
+            document.getElementById('forceInKg').innerText = `(~${kg_in.toFixed(1)} kg real, Theo: ${Math.round(f_in_theo)} N)`;
+        }
+
+        // Lokaler Fallback zum Testen ohne laufendes Backend
+        function simulateFallback(input) {
             const mockData = {
                 query: input,
-                kategorie: "Pneumatik · Rundzylinder",
-                hersteller: "Airtec / Industriestandard",
+                kategorie: "Pneumatik-Zylinder (ISO)",
+                hersteller: "Airtec",
+                is_cylinder: true,
+                is_hydraulic: false,
+                kolben_mm: 32.0,
+                stange_mm: 12.0,
                 datenblatt_pdf: `https://www.google.com/search?q=${encodeURIComponent(input)}+Datenblatt+filetype:pdf`,
                 spezifikationen: {
-                    "Bauart / Typ": "Rundzylinder (doppeltwirkend)",
-                    "Kolben-Ø": "32 mm",
+                    "Hersteller": "Airtec",
+                    "Komponententyp": "Pneumatik-Zylinder",
+                    "Kolben-Durchmesser": "32 mm",
                     "Hublänge": "10 mm",
-                    "Druckluftanschluss": "G 1/8\"",
                     "Stangendurchmesser": "12 mm",
-                    "Betriebsdruck": "1,0 bis 10,0 bar"
+                    "Betriebsdruck max.": "10 bar"
                 },
                 ersatzteile: [
-                    { bezeichnung: "Dichtsatz für Ø 32 mm", verwendung: "Verschleißteil Dichtung (Kolben/Stange)", artikelnummer: "DS-" + input, preis: "18,70 €" },
-                    { bezeichnung: "Zylinderschalter / Näherungsschalter", verwendung: "Positionsrückmeldung", artikelnummer: "ZS-D-24V-2M", preis: "24,50 €" }
+                    { bezeichnung: "Dichtsatz für Ø 32 mm", verwendung: "Verschleißteil-Kit", artikelnummer: "DS-" + input, preis: "18,70 €" }
                 ],
                 haendler: [
-                    { name: "jenpneumatik Shop", subtitle: "Hauseigener Fachvertrieb", price: "182,50 €", delivery: "Sofort ab Lager (1-2 Werktage)", link: `https://www.google.com/search?q=site:jenpneumatik.de+${encodeURIComponent(input)}` },
-                    { name: "Landefeld Shop", subtitle: "Industrie-Pneumatik Partner", price: "187,54 €", delivery: "Ca. 24h Express verfügbar", link: `https://www.landefeld.de/gruppe/de/rundzylinder-doppeltwirkend-industriestandard/${encodeURIComponent(input)}` },
-                    { name: "RS Components", subtitle: "Industriekatalog B2B", price: "194,20 €", delivery: "Lieferzeit: 2-3 Werktage", link: `https://de.rs-online.com/web/c/?searchTerm=${encodeURIComponent(input)}` }
+                    { name: "jenpneumatik Shop", subtitle: "Hauseigener Fachvertrieb", price: "182,50 €", delivery: "Sofort ab Lager", link: `https://www.google.com/search?q=site:jenpneumatik.de+${encodeURIComponent(input)}` },
+                    { name: "Landefeld Shop", subtitle: "Partner für Pneumatik", price: "187,54 €", delivery: "Lagernd", link: `https://www.landefeld.de/gruppe/de/?q=${encodeURIComponent(input)}` },
+                    { name: "RS Components", subtitle: "B2B-Katalog", price: "194,20 €", delivery: "2-3 Tage", link: `https://de.rs-online.com/web/c/?searchTerm=${encodeURIComponent(input)}` }
                 ]
             };
+            currentCylinderData = mockData;
             renderResults(mockData);
         }
     </script>
